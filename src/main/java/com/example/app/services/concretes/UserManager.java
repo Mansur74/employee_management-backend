@@ -8,6 +8,8 @@ import static com.example.app.mappers.UserMapper.mapToUserDto;
 import com.example.app.dtos.UserDto;
 import com.example.app.models.User;
 import com.example.app.repositories.abstracts.UserDao;
+import com.example.app.results.DataResult;
+import com.example.app.results.SuccessDataResult;
 import com.example.app.services.abstracts.UserService;
 
 
@@ -20,22 +22,22 @@ public class UserManager implements UserService {
 		this.userDao = userDao;
 	}
 	
-	public UserDto createUser(UserDto userDto)
+	public DataResult<UserDto> createUser(UserDto userDto)
 	{
 		User createdUser = userDao.save(mapToUser(userDto));
-		return mapToUserDto(createdUser);
+		return new SuccessDataResult<UserDto>(mapToUserDto(createdUser));
 	}
 	
-	public UserDto getUserById(int id)
+	public DataResult<UserDto> getUserById(int id)
 	{
-		User user = userDao.findById(id).get();
-		return mapToUserDto(user);
+		User user = userDao.findById(id).orElseThrow();
+		return new SuccessDataResult<UserDto>(mapToUserDto(user));
 	}
 	
-	public UserDto getUserByEmail(String email)
+	public DataResult<UserDto> getUserByEmail(String email)
 	{
 		User user = userDao.findByEmail(email);
-		return mapToUserDto(user);
+		return new SuccessDataResult<UserDto>(mapToUserDto(user));
 	}
 	
 	

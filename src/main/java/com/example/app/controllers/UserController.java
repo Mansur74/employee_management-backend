@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.dtos.UserDto;
+import com.example.app.results.DataResult;
+import com.example.app.results.SuccessDataResult;
 import com.example.app.services.abstracts.UserService;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/api")
@@ -25,24 +29,24 @@ public class UserController {
 	}
 	
 	@PostMapping("/user")
-	public ResponseEntity<UserDto> createUser(@RequestBody UserDto user)
+	public ResponseEntity<DataResult<UserDto>> createUser(@Valid @RequestBody UserDto user)
 	{
-		UserDto userDto = this.userService.createUser(user);
-		return new ResponseEntity<UserDto>(userDto, HttpStatus.CREATED);
+		DataResult<UserDto> userDto = this.userService.createUser(user);
+		return new ResponseEntity<DataResult<UserDto>>(userDto, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/user/{userId}")
-	public ResponseEntity<UserDto> createUser(@PathVariable("userId") int userId)
+	public ResponseEntity<DataResult<UserDto>> createUser(@PathVariable("userId") int userId)
 	{
-		UserDto userDto = this.userService.getUserById(userId);
-		return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
+		DataResult<UserDto> userDto = this.userService.getUserById(userId);
+		return new ResponseEntity<DataResult<UserDto>>(userDto, HttpStatus.OK);
 	}
 	
 	@GetMapping("/user")
-	public ResponseEntity<UserDto> createUser(@RequestParam("email") String email)
+	public ResponseEntity<DataResult<UserDto>> createUser(@RequestParam("email") String email)
 	{
-		UserDto userDto = this.userService.getUserByEmail(email);
-		return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
+		DataResult<UserDto> userDto = this.userService.getUserByEmail(email);
+		return new ResponseEntity<DataResult<UserDto>>(userDto, HttpStatus.OK);
 	}
 	
 	
