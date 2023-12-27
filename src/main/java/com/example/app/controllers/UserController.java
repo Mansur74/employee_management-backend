@@ -9,28 +9,32 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.app.dtos.AccessTokenDto;
 import com.example.app.dtos.AuthRequest;
 import com.example.app.dtos.JwtResponse;
-import com.example.app.dtos.RefreshTokenDto;
 import com.example.app.dtos.UserDto;
-import com.example.app.models.RefreshToken;
-import com.example.app.models.User;
+import com.example.app.models.UserEntity;
 import com.example.app.results.DataResult;
 import com.example.app.results.SuccessDataResult;
+import com.example.app.security.helpers.CustomUserDetailsService;
 import com.example.app.security.services.JwtService;
-import com.example.app.security.services.RefreshTokenService;
 import com.example.app.services.abstracts.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -39,18 +43,16 @@ public class UserController {
 	
 	@Autowired
 	public UserService userService;
-	
 	@Autowired
     private JwtService jwtService;
-
-    @Autowired
-    RefreshTokenService refreshTokenService;
-
     @Autowired
     private  AuthenticationManager authenticationManager;
+    @Autowired
+    CustomUserDetailsService customUserDetailsService;
+
 
     @PostMapping("/user/sign-up")
-    public ResponseEntity<DataResult<UserDto>>saveUser(@RequestBody UserDto user) {
+    public ResponseEntity<DataResult<UserDto>>saveUser(@Valid @RequestBody UserDto user) {
     	DataResult<UserDto> userDto = userService.createUser(user);
         return new ResponseEntity<DataResult<UserDto>>(userDto, HttpStatus.CREATED);
     }
@@ -62,6 +64,13 @@ public class UserController {
         return ResponseEntity.ok(userResponses);      
     }
     
+ 
+    @GetMapping("/me")
+    public ResponseEntity<User> getMe(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(user);      
+    }
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/user/{userId}")
 	public ResponseEntity<DataResult<UserDto>> getUserById(@PathVariable("userId") int userId)
 	{
@@ -70,13 +79,13 @@ public class UserController {
 	}
 
     @PostMapping("/user/login")
-    public JwtResponse AuthenticateAndGetToken(@RequestBody AuthRequest authRequest){
+    public ResponseEntity<DataResult<JwtResponse>> AuthenticateAndGetToken(@RequestBody AuthRequest authRequest){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         if(authentication.isAuthenticated()){
-            RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequest.getUsername());
-           return JwtResponse.builder()
-                   .accessToken(jwtService.GenerateToken(authRequest.getUsername()))
-                   .refreshToken(refreshToken.getToken()).build();
+           JwtResponse response = JwtResponse.builder()
+                   .accessToken(jwtService.GenerateToken(authRequest.getUsername(), true))
+                   .refreshToken(jwtService.GenerateToken(authRequest.getUsername(), false)).build();
+           return new ResponseEntity<>(new SuccessDataResult<JwtResponse>(response), HttpStatus.OK);
 
         } else {
             throw new UsernameNotFoundException("invalid user request..!!");
@@ -85,21 +94,12 @@ public class UserController {
     }
 
 
-    @PostMapping("/user/refreshToken")
-    public JwtResponse refreshToken(@RequestBody RefreshTokenDto refreshTokenDto){
-        return refreshTokenService.findByToken(refreshTokenDto.getRefreshToken())
-                .map(refreshTokenService::verifyExpiration)
-                .map(RefreshToken::getUserInfo)
-                .map(userInfo -> {
-                    String accessToken = jwtService.GenerateToken(userInfo.getUsername());
-                    return JwtResponse.builder()
-                            .accessToken(accessToken)
-                            .refreshToken(refreshTokenDto.getRefreshToken()).build();
-                }).orElseThrow(() ->new RuntimeException("Refresh Token is not in DB..!!"));
+    @GetMapping("/user/accessToken")
+    public ResponseEntity<DataResult<AccessTokenDto>> refreshToken(HttpServletRequest request){
+    	String authHeader = request.getHeader("Authorization");
+    	DataResult<AccessTokenDto> accessToken = jwtService.getAccessToken(authHeader);
+    	return new ResponseEntity<DataResult<AccessTokenDto>>(accessToken, HttpStatus.OK);
     }
 
-	
-	
-	
 	
 }

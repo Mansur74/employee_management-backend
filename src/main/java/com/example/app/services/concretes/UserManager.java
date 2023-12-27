@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 import com.example.app.dtos.UserDto;
 import com.example.app.models.Role;
-import com.example.app.models.User;
+import com.example.app.models.UserEntity;
 import com.example.app.repositories.abstracts.RoleDao;
 import com.example.app.repositories.abstracts.UserDao;
 import com.example.app.results.DataResult;
@@ -41,28 +41,28 @@ public class UserManager implements UserService {
 	{
 
 		userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-		User user = mapToUser(userDto);
+		UserEntity user = mapToUser(userDto);
 		Role role = roleDao.findByName("ADMIN");
 		user.setRoles(Arrays.asList(role));
-		User createdUser = userDao.save(user);
+		UserEntity createdUser = userDao.save(user);
 		return new SuccessDataResult<UserDto>(mapToUserDto(createdUser));
 	}
 	
 	public DataResult<UserDto> getUserById(int id)
 	{
-		User user = userDao.findById(id).orElseThrow();
+		UserEntity user = userDao.findById(id).orElseThrow();
 		return new SuccessDataResult<UserDto>(mapToUserDto(user));
 	}
 	
 	public DataResult<UserDto> getUserByEmail(String email)
 	{
-		User user = userDao.findByEmail(email).get();
+		UserEntity user = userDao.findByEmail(email).get();
 		return new SuccessDataResult<UserDto>(mapToUserDto(user));
 	}
 
 	@Override
 	public DataResult<List<UserDto>> getAllUsers() {
-		List<User> users = this.userDao.findAll();
+		List<UserEntity> users = this.userDao.findAll();
 		return new SuccessDataResult<List<UserDto>>(users.stream().map(user -> mapToUserDto(user)).collect(Collectors.toList()));
 	}
 	

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.app.dtos.EmployeeDto;
 import com.example.app.models.Employee;
-import com.example.app.models.User;
+import com.example.app.models.UserEntity;
 import com.example.app.repositories.abstracts.EmployeeDao;
 import com.example.app.repositories.abstracts.UserDao;
 import com.example.app.results.DataResult;
@@ -42,7 +42,7 @@ public class EmployeeManager implements EmployeeService{
 	@Override
 	public DataResult<EmployeeDto> createEmployee(EmployeeDto employeeDto, int userId) {
 		
-		User user = userDao.findById(userId).get();
+		UserEntity user = userDao.findById(userId).get();
 		Employee employee = mapToEmployee(employeeDto);
 		employee.setUser(user);
 		Employee createdEmployee = employeeDao.save(employee);

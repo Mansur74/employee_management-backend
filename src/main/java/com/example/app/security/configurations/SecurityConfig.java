@@ -1,6 +1,6 @@
 package com.example.app.security.configurations;
 
-import com.example.app.security.helpers.UserDetailsServiceImpl;
+import com.example.app.security.helpers.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,14 +28,14 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(){
-        return new UserDetailsServiceImpl();
+        return new CustomUserDetailsService();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/user/sign-up", "/api/user/login", "/api/user/refreshToken")
+                .requestMatchers("/api/user/sign-up", "/api/user/login", "/api/user/accessToken")
                 .permitAll()
                 .and()
                 .authorizeHttpRequests()

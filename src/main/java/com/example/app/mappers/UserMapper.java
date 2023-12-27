@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import com.example.app.dtos.UserDto;
 import com.example.app.models.Role;
-import com.example.app.models.User;
+import com.example.app.models.UserEntity;
 
 import static com.example.app.mappers.EmployeeMapper.mapToEmployee;
 import static com.example.app.mappers.EmployeeMapper.mapToEmployeeDto;
@@ -14,9 +14,9 @@ import static com.example.app.mappers.RoleMapper.mapToRoleDto;
 
 public class UserMapper {
 	
-	public static User mapToUser(UserDto userDto)
+	public static UserEntity mapToUser(UserDto userDto)
 	{
-		return User.builder()
+		return UserEntity.builder()
 				.id(userDto.getId())
 				.firstName(userDto.getFirstName())
 				.lastName(userDto.getLastName())
@@ -26,7 +26,7 @@ public class UserMapper {
 				.build();
 	}
 	
-	public static UserDto mapToUserDto(User user)
+	public static UserDto mapToUserDto(UserEntity user)
 	{
 
 		return UserDto.builder()
