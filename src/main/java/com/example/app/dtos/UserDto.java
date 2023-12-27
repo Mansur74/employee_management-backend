@@ -1,6 +1,9 @@
 package com.example.app.dtos;
 
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
+
+import com.example.app.models.Role;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -20,11 +23,11 @@ public class UserDto {
 	@NotEmpty(message = "latName can not be empty")
 	String lastName;
 	@NotEmpty(message = "userName can not be empty")
-	String userName;
+	String username;
 	@NotEmpty(message = "email can not be empty")
 	String email;
 	@Size(min = 6, max = 10, message = "passport should be at least 6, max 10 chars")
 	String password;
-	LocalDateTime createdAt;
-	LocalDateTime upDatedAt;
+	List<EmployeeDto> employees;
+    List<RoleDto> roles;
 }
