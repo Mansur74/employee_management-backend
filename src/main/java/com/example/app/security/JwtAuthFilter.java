@@ -32,7 +32,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-    	if(!request.getRequestURI().equals("/api/authorization/accessToken"))
+    	if(!request.getRequestURI().equals("/api/authorization/accessToken") && !request.getRequestURI().equals("/api/authorization/logout"))
     	{
     		try {
             	String authHeader = request.getHeader("Authorization");

@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,7 @@ import com.example.app.dtos.AuthRequest;
 import com.example.app.dtos.JwtResponse;
 import com.example.app.dtos.UserDto;
 import com.example.app.results.DataResult;
+import com.example.app.results.Result;
 import com.example.app.results.SuccessDataResult;
 import com.example.app.security.JwtService;
 import com.example.app.services.abstracts.UserService;
@@ -67,6 +69,12 @@ public class AuthorizationController {
     	String authHeader = request.getHeader("Authorization");
     	DataResult<AccessTokenDto> accessToken = jwtService.getAccessToken(authHeader);
     	return new ResponseEntity<DataResult<AccessTokenDto>>(accessToken, HttpStatus.OK);
+    }
+    
+    @DeleteMapping("/authorization/logout")
+    public ResponseEntity<Result> logout(HttpServletRequest request){
+    	String authHeader = request.getHeader("Authorization");
+    	return ResponseEntity.status(HttpStatus.OK).body(jwtService.logout(authHeader));
     }
 
 }

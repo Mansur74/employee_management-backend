@@ -3,6 +3,7 @@ package com.example.app.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.app.dtos.EmployeeDto;
 import com.example.app.results.DataResult;
 import com.example.app.results.PageResult;
+import com.example.app.results.Result;
 import com.example.app.services.abstracts.EmployeeService;
 
 @RestController
@@ -23,6 +25,13 @@ public class EmployeeController {
 	
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@PostMapping("/employee")
+	public ResponseEntity<DataResult<EmployeeDto>> createEmployee(@RequestBody EmployeeDto employeeDto)
+	{
+		DataResult<EmployeeDto> employee = employeeService.createEmployee(employeeDto);
+		return new ResponseEntity<DataResult<EmployeeDto>>(employee, HttpStatus.CREATED);
+	}
 	
 	@GetMapping("/employee")
 	public ResponseEntity<DataResult<PageResult<EmployeeDto>>> getAllEmployees(
@@ -40,13 +49,6 @@ public class EmployeeController {
 		return ResponseEntity.ok(employee);
 	}
 	
-	@PostMapping("/employee")
-	public ResponseEntity<DataResult<EmployeeDto>> createEmployee(@RequestBody EmployeeDto employeeDto)
-	{
-		DataResult<EmployeeDto> employee = employeeService.createEmployee(employeeDto);
-		return new ResponseEntity<DataResult<EmployeeDto>>(employee, HttpStatus.CREATED);
-	}
-	
 	@PatchMapping("/employee/{employeeId}")
 	public ResponseEntity<DataResult<EmployeeDto>> updateEmployee(@RequestBody EmployeeDto employeeDto, @PathVariable("employeeId") int employeeId)
 	{
@@ -54,13 +56,12 @@ public class EmployeeController {
 		return new ResponseEntity<DataResult<EmployeeDto>>(employee, HttpStatus.CREATED);
 	}
 	
-	/*
-	@PreAuthorize("hasAuthority('ADMIN')")
-	@PostMapping("user/{userId}/employee")
-	public ResponseEntity<DataResult<EmployeeDto>> createEmployee(@RequestBody EmployeeDto employeeDto, @PathVariable int userId)
+	@DeleteMapping("/employee/{employeeId}")
+	public ResponseEntity<Result> deleteEmployee(@PathVariable("employeeId") int employeeId)
 	{
-		DataResult<EmployeeDto> employee = employeeService.createEmployee(employeeDto, userId);
-		return new ResponseEntity<DataResult<EmployeeDto>>(employee, HttpStatus.CREATED);
-	}*/
+		Result result = employeeService.deleteEmployee(employeeId);
+		return new ResponseEntity<Result>(result, HttpStatus.CREATED);
+	}
+	
 	
 }

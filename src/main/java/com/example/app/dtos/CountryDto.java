@@ -1,19 +1,22 @@
 package com.example.app.dtos;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PassportDto {
+public class CountryDto {
+	
 	private int id;
-	private Long passportNumber;
-	private LocalDateTime validDateTime;
-	private List<CountryDto> countries;
+	private String countryName;
+	private String capitalCity;
+	private Double population;
+	private String imgURL;
+	
 }
