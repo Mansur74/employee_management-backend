@@ -1,4 +1,4 @@
-package com.example.app.security.services;
+package com.example.app.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import com.example.app.dtos.AccessTokenDto;
 import com.example.app.results.DataResult;
 import com.example.app.results.SuccessDataResult;
-import com.example.app.security.helpers.CustomUserDetailsService;
 
 import java.security.Key;
 import java.util.Date;
@@ -71,13 +70,13 @@ public class JwtService {
     }
 
 
-    private String createToken(Map<String, Object> claims, String username, boolean isAccessToken) {
+    private String createToken(Map<String, Object> claims, String email, boolean isAccessToken) {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(username)
+                .setSubject(email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(isAccessToken ? System.currentTimeMillis()+1000*15 : System.currentTimeMillis()+Integer.MAX_VALUE))
+                .setExpiration(new Date(isAccessToken ? System.currentTimeMillis()+1000*60*60 : System.currentTimeMillis()+Integer.MAX_VALUE))
                 .signWith(getSignKey(isAccessToken), SignatureAlgorithm.HS256).compact();
     }
 
@@ -91,15 +90,15 @@ public class JwtService {
         if(authHeader != null)
         {
         	String refreshToken = null;
-            String username = null;
+            String email = null;
             
             if(authHeader != null && authHeader.startsWith("Bearer ")){
             	refreshToken = authHeader.substring(7);
-                username = extractUsername(refreshToken, false);
+            	email = extractUsername(refreshToken, false);
             }
         	
-        	UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-        	AccessTokenDto accessTokenDto =  AccessTokenDto.builder().accessToken(GenerateToken(username, true)).build();
+        	UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
+        	AccessTokenDto accessTokenDto =  AccessTokenDto.builder().accessToken(GenerateToken(email, true)).build();
         	if(validateToken(refreshToken, userDetails, false)){
         		return new SuccessDataResult<AccessTokenDto>(accessTokenDto);  
         	}

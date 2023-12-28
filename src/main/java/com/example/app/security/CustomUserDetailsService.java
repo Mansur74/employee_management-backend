@@ -1,4 +1,4 @@
-package com.example.app.security.helpers;
+package com.example.app.security;
 
 import com.example.app.models.UserEntity;
 import com.example.app.repositories.abstracts.UserDao;
@@ -20,12 +20,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserDao userDao;
 
     @Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserEntity user = userDao.findByUsername(username);
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		UserEntity user = userDao.findByEmail(email);
 		if(user != null)
 		{
 			User authUser = new User(
-					user.getUsername(),
+					user.getEmail(),
 					user.getPassword(),
 					user.getRoles().stream().map((role) -> new SimpleGrantedAuthority(role.getName().toUpperCase()))
 					.collect(Collectors.toList())

@@ -56,7 +56,7 @@ public class UserManager implements UserService {
 	
 	public DataResult<UserDto> getUserByEmail(String email)
 	{
-		UserEntity user = userDao.findByEmail(email).get();
+		UserEntity user = userDao.findByEmail(email);
 		return new SuccessDataResult<UserDto>(mapToUserDto(user));
 	}
 

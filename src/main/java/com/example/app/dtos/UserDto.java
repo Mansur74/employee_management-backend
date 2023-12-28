@@ -20,14 +20,13 @@ public class UserDto {
 	int id;
 	@NotEmpty(message = "firstName can not be empty")
 	String firstName;
-	@NotEmpty(message = "latName can not be empty")
+	@NotEmpty(message = "lastName can not be empty")
 	String lastName;
-	@NotEmpty(message = "userName can not be empty")
+	@NotEmpty(message = "username can not be empty")
 	String username;
 	@NotEmpty(message = "email can not be empty")
 	String email;
 	@Size(min = 6, max = 10, message = "passport should be at least 6, max 10 chars")
 	String password;
-	List<EmployeeDto> employees;
     List<RoleDto> roles;
 }

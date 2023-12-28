@@ -9,6 +9,8 @@ import java.util.Set;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,10 +51,6 @@ public class UserEntity {
 	private LocalDateTime createdAt;
 	@UpdateTimestamp
 	private LocalDateTime upDatedAt;
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<Employee> employees = new ArrayList<>();
-	
-	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "users_roles", 

@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.app.dtos.EmployeeDto;
+import com.example.app.dtos.RoleDto;
 import com.example.app.dtos.UserDto;
 import com.example.app.models.Role;
 import com.example.app.models.UserEntity;
@@ -36,8 +38,11 @@ public class UserMapper {
 				.username(user.getUsername())
 				.email(user.getEmail())
 				.password(user.getPassword())
-				.roles(user.getRoles() == null ? null : user.getRoles().stream().map(role -> mapToRoleDto(role)).collect(Collectors.toList()))
-				.employees(user.getEmployees() == null ? null : user.getEmployees().stream().map(employee -> mapToEmployeeDto(employee)).collect(Collectors.toList()))
+				.roles(user.getRoles() == null ? null : user.getRoles().stream()
+						.map(role -> RoleDto.builder()
+								.id(role.getId())
+								.name(role.getName())
+								.build()).collect(Collectors.toList()))
 				.build();
 	}
 }

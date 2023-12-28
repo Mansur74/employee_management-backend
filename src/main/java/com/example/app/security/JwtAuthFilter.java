@@ -1,4 +1,4 @@
-package com.example.app.security.configurations;
+package com.example.app.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,9 +13,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-
-import com.example.app.security.helpers.CustomUserDetailsService;
-import com.example.app.security.services.JwtService;
 
 import java.io.IOException;
 
@@ -35,19 +32,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-    	if(!request.getRequestURI().equals("/api/user/accessToken"))
+    	if(!request.getRequestURI().equals("/api/authorization/accessToken"))
     	{
     		try {
             	String authHeader = request.getHeader("Authorization");
                 String token = null;
-                String username = null;
+                String email = null;
                 if(authHeader != null && authHeader.startsWith("Bearer ")){
                     token = authHeader.substring(7);
-                    username = jwtService.extractUsername(token, true);
+                    email = jwtService.extractUsername(token, true);
                 }
 
-                if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-                    UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+                if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
+                    UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
                     if(jwtService.validateToken(token, userDetails, true)){
                         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

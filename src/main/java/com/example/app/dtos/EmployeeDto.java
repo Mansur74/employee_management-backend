@@ -14,13 +14,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class EmployeeDto {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String firstName;
 	private String lastName;
+	private int age;
+	private LocalDateTime hiringDate;
 	private String department;
 	private int salary;
 	private String description;
 	private String imgURL;
+	private PassportDto passport;
 }
