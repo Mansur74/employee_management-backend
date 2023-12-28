@@ -1,4 +1,4 @@
 # Spring-Backend
-- Employee Manegement Backend
+- Employee Manegement Backend (Java version)
 - Jwt Authorization
 - MSSQL
