@@ -1,10 +1,12 @@
 package com.example.app.mappers;
 
-import com.example.app.dtos.EmployeeDto;
-import com.example.app.dtos.PassportDto;
-import com.example.app.models.Employee;
+import com.example.app.entities.Employee;
+
 import static com.example.app.mappers.PassportMapper.mapToPassport;
 import static com.example.app.mappers.PassportMapper.mapToPassportDto;
+
+import com.example.app.dtos.EmployeeDto;
+import com.example.app.dtos.PassportDto;
 
 public class EmployeeMapper {
 	public static Employee mapToEmployee(EmployeeDto employeeDto)

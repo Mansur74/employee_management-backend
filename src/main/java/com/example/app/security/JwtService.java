@@ -14,12 +14,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.example.app.core.utilities.results.DataResult;
+import com.example.app.core.utilities.results.ErrorResult;
+import com.example.app.core.utilities.results.Result;
+import com.example.app.core.utilities.results.SuccessDataResult;
+import com.example.app.core.utilities.results.SuccessResult;
 import com.example.app.dtos.AccessTokenDto;
-import com.example.app.results.DataResult;
-import com.example.app.results.ErrorResult;
-import com.example.app.results.Result;
-import com.example.app.results.SuccessDataResult;
-import com.example.app.results.SuccessResult;
 
 import java.security.Key;
 import java.util.ArrayList;

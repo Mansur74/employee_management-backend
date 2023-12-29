@@ -1,7 +1,7 @@
 package com.example.app.mappers;
 
 import com.example.app.dtos.CountryDto;
-import com.example.app.models.Country;
+import com.example.app.entities.Country;
 
 public class CountryMapper {
 	public static Country mapToCountry(CountryDto countryDto)

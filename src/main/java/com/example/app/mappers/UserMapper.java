@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.app.core.dtos.UserDto;
+import com.example.app.core.entities.UserEntity;
 import com.example.app.dtos.EmployeeDto;
 import com.example.app.dtos.RoleDto;
-import com.example.app.dtos.UserDto;
-import com.example.app.models.Role;
-import com.example.app.models.UserEntity;
+import com.example.app.entities.Role;
 
 import static com.example.app.mappers.EmployeeMapper.mapToEmployee;
 import static com.example.app.mappers.EmployeeMapper.mapToEmployeeDto;

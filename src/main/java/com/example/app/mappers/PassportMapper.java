@@ -4,7 +4,7 @@ import java.util.stream.Collectors;
 
 import com.example.app.dtos.CountryDto;
 import com.example.app.dtos.PassportDto;
-import com.example.app.models.Passport;
+import com.example.app.entities.Passport;
 
 public class PassportMapper {
 	
