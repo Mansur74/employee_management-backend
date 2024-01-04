@@ -32,5 +32,13 @@ public class PassportMapper {
 						.build()).collect(Collectors.toList()))
 				.build();
 	}
+	
+	public static Passport updatePassport(PassportDto passportDto, Passport passport)
+	{
+		passport.setPassportNumber(passportDto.getPassportNumber());
+		passport.setValidDateTime(passportDto.getValidDateTime());
+		return passport;
+	}
+	
 
 }

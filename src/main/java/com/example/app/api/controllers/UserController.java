@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +24,12 @@ public class UserController {
 	
 	@Autowired
 	public UserService userService;
+	
+	@GetMapping("/user/me")
+    public ResponseEntity<DataResult<UserDto>> getMe(@AuthenticationPrincipal User user) {
+		DataResult<UserDto> userDto = this.userService.getUserByEmail(user.getUsername());
+		return ResponseEntity.status(HttpStatus.OK).body(userDto);
+    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/user")
@@ -31,17 +38,12 @@ public class UserController {
         return ResponseEntity.ok(userResponses);      
     }
     
-    @GetMapping("/user/me")
-    public ResponseEntity<User> getMe(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(user);      
-    }
-    
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/user/{userId}")
 	public ResponseEntity<DataResult<UserDto>> getUserById(@PathVariable("userId") int userId)
 	{
 		DataResult<UserDto> userDto = this.userService.getUserById(userId);
-		return new ResponseEntity<DataResult<UserDto>>(userDto, HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.OK).body(userDto);
 	}
 
 	
