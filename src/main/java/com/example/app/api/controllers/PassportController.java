@@ -33,14 +33,14 @@ public class PassportController {
 		return ResponseEntity.ok(employee);
 	}
 	
-	@PostMapping("/employee/{employeeId}/passport")
+	@PostMapping("/employee/{employeeId}")
 	public ResponseEntity<DataResult<PassportDto>> createPassport(@RequestBody PassportDto passportDto, @PathVariable int employeeId)
 	{
 		DataResult<PassportDto> cretedPassport = passportService.createPassport(passportDto, employeeId);
 		return ResponseEntity.status(HttpStatus.CREATED).body(cretedPassport);
 	}
 	
-	@PatchMapping("/passport/{passport}")
+	@PatchMapping("/passport/{passportId}")
 	public ResponseEntity<DataResult<PassportDto>> updatePassportById(@RequestBody PassportDto passportDto, @PathVariable int passportId)
 	{
 		DataResult<PassportDto> updatedPassport = passportService.updatePassportById(passportDto, passportId);

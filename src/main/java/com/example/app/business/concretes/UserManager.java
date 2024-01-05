@@ -14,13 +14,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.example.app.business.abstracts.UserService;
-import com.example.app.core.dataAccess.abstracts.UserDao;
-import com.example.app.core.dtos.UserDto;
-import com.example.app.core.entities.UserEntity;
 import com.example.app.core.utilities.results.DataResult;
+import com.example.app.core.utilities.results.Result;
 import com.example.app.core.utilities.results.SuccessDataResult;
+import com.example.app.core.utilities.results.SuccessResult;
 import com.example.app.dataAccess.abstracts.RoleDao;
+import com.example.app.dataAccess.abstracts.UserDao;
+import com.example.app.dtos.UserDto;
 import com.example.app.entities.Role;
+import com.example.app.entities.UserEntity;
 
 
 @Service
@@ -37,7 +39,7 @@ public class UserManager implements UserService {
 		this.roleDao = roleDao;
 	}
 	
-	public DataResult<UserDto> createUser(UserDto userDto)
+	public Result createUser(UserDto userDto)
 	{
 
 		userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
@@ -45,7 +47,7 @@ public class UserManager implements UserService {
 		Role role = roleDao.findByName("ADMIN");
 		user.setRoles(Arrays.asList(role));
 		UserEntity createdUser = userDao.save(user);
-		return new SuccessDataResult<UserDto>(mapToUserDto(createdUser));
+		return new SuccessResult("Successfully created");
 	}
 	
 	public DataResult<UserDto> getUserById(int id)

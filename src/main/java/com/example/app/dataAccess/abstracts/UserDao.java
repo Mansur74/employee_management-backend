@@ -1,10 +1,10 @@
-package com.example.app.core.dataAccess.abstracts;
+package com.example.app.dataAccess.abstracts;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.app.core.entities.UserEntity;
+import com.example.app.entities.UserEntity;
 
 public interface UserDao extends JpaRepository<UserEntity, Integer> {
 	public UserEntity findByEmail(String email);
-	public UserEntity findByUsername(String userName);
+	public UserEntity findByUserName(String userName);
 }

@@ -1,9 +1,8 @@
-package com.example.app.core.dtos;
+package com.example.app.dtos;
 
 import java.util.List;
 import java.util.Set;
 
-import com.example.app.dtos.RoleDto;
 import com.example.app.entities.Role;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -24,7 +23,7 @@ public class UserDto {
 	@NotEmpty(message = "lastName can not be empty")
 	String lastName;
 	@NotEmpty(message = "username can not be empty")
-	String username;
+	String userName;
 	@NotEmpty(message = "email can not be empty")
 	String email;
 	@Size(min = 6, max = 10, message = "passport should be at least 6, max 10 chars")

@@ -19,6 +19,8 @@ import com.example.app.core.utilities.results.PageResult;
 import com.example.app.core.utilities.results.Result;
 import com.example.app.dtos.EmployeeDto;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api")
 public class EmployeeController {
@@ -27,7 +29,7 @@ public class EmployeeController {
 	private EmployeeService employeeService;
 	
 	@PostMapping("/employee")
-	public ResponseEntity<DataResult<EmployeeDto>> createEmployee(@RequestBody EmployeeDto employeeDto)
+	public ResponseEntity<DataResult<EmployeeDto>> createEmployee(@Valid @RequestBody EmployeeDto employeeDto)
 	{
 		DataResult<EmployeeDto> employee = employeeService.createEmployee(employeeDto);
 		return new ResponseEntity<DataResult<EmployeeDto>>(employee, HttpStatus.CREATED);
@@ -43,14 +45,14 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("/employee/{employeeId}")
-	public ResponseEntity<DataResult<EmployeeDto>> getEmployeeById(int employeeId)
+	public ResponseEntity<DataResult<EmployeeDto>> getEmployeeById(@PathVariable("employeeId") int employeeId)
 	{
 		DataResult<EmployeeDto> employee = employeeService.getEmployeeById(employeeId);
 		return ResponseEntity.ok(employee);
 	}
 	
 	@PatchMapping("/employee/{employeeId}")
-	public ResponseEntity<DataResult<EmployeeDto>> updateEmployee(@RequestBody EmployeeDto employeeDto, @PathVariable("employeeId") int employeeId)
+	public ResponseEntity<DataResult<EmployeeDto>> updateEmployee(@Valid @RequestBody EmployeeDto employeeDto, @PathVariable("employeeId") int employeeId)
 	{
 		DataResult<EmployeeDto> employee = employeeService.updateEmployeeById(employeeDto, employeeId);
 		return new ResponseEntity<DataResult<EmployeeDto>>(employee, HttpStatus.CREATED);

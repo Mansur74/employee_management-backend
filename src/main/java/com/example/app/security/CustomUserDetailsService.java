@@ -1,7 +1,7 @@
 package com.example.app.security;
 
-import com.example.app.core.dataAccess.abstracts.UserDao;
-import com.example.app.core.entities.UserEntity;
+import com.example.app.dataAccess.abstracts.UserDao;
+import com.example.app.entities.UserEntity;
 
 import java.util.stream.Collectors;
 

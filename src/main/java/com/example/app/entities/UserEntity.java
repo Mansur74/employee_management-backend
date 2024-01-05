@@ -1,4 +1,4 @@
-package com.example.app.core.entities;
+package com.example.app.entities;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,7 +9,6 @@ import java.util.Set;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.example.app.entities.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -46,12 +45,12 @@ public class UserEntity {
 	@Column(unique = true)
 	private String email;
 	@Column(unique = true)
-	private String username;
+	private String userName;
 	private String password;
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 	@UpdateTimestamp
-	private LocalDateTime upDatedAt;
+	private LocalDateTime updatedAt;
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "users_roles", 

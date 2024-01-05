@@ -25,10 +25,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	@Autowired
 	CustomUserDetailsService customUserDetailsService;
 
-	@Autowired
-	@Qualifier("handlerExceptionResolver")
-	private HandlerExceptionResolver resolver;
-
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
@@ -39,30 +35,28 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 
 		else {
-			try {
-				String authHeader = request.getHeader("Authorization");
-				String token = null;
-				String email = null;
-				if (authHeader != null && authHeader.startsWith("Bearer ")) {
-					token = authHeader.substring(7);
-					email = jwtService.extractUsername(token, true);
-				}
 
-				if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-					UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
-					if (jwtService.validateToken(token, userDetails, true)) {
-						UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-								userDetails, null, userDetails.getAuthorities());
-						authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-						SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-					}
-
-				}
-
-				filterChain.doFilter(request, response);
-			} catch (RuntimeException e) {
-				resolver.resolveException(request, response, null, e);
+			String authHeader = request.getHeader("Authorization");
+			String token = null;
+			String email = null;
+			if (authHeader != null && authHeader.startsWith("Bearer ")) {
+				token = authHeader.substring(7);
+				email = jwtService.extractUsername(token, true);
 			}
+
+			if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+				UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
+				if (jwtService.validateToken(token, userDetails, true)) {
+					UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+							userDetails, null, userDetails.getAuthorities());
+					authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+					SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+				}
+
+			}
+
+			filterChain.doFilter(request, response);
+
 		}
 
 	}

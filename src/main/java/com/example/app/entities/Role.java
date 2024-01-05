@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-import com.example.app.core.entities.UserEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;

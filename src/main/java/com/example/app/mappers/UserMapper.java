@@ -4,14 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.app.core.dtos.UserDto;
-import com.example.app.core.entities.UserEntity;
 import com.example.app.dtos.EmployeeDto;
 import com.example.app.dtos.RoleDto;
+import com.example.app.dtos.UserDto;
 import com.example.app.entities.Role;
+import com.example.app.entities.UserEntity;
 
-import static com.example.app.mappers.EmployeeMapper.mapToEmployee;
-import static com.example.app.mappers.EmployeeMapper.mapToEmployeeDto;
 import static com.example.app.mappers.RoleMapper.mapToRoleDto;
 
 public class UserMapper {
@@ -22,7 +20,7 @@ public class UserMapper {
 				.id(userDto.getId())
 				.firstName(userDto.getFirstName())
 				.lastName(userDto.getLastName())
-				.username(userDto.getUsername())
+				.userName(userDto.getUserName())
 				.email(userDto.getEmail())
 				.password(userDto.getPassword())
 				.build();
@@ -35,14 +33,11 @@ public class UserMapper {
 				.id(user.getId())
 				.firstName(user.getFirstName())
 				.lastName(user.getLastName())
-				.username(user.getUsername())
+				.userName(user.getUserName())
 				.email(user.getEmail())
 				.password(user.getPassword())
 				.roles(user.getRoles() == null ? null : user.getRoles().stream()
-						.map(role -> RoleDto.builder()
-								.id(role.getId())
-								.name(role.getName())
-								.build()).collect(Collectors.toList()))
+						.map(role -> mapToRoleDto(role)).collect(Collectors.toList()))
 				.build();
 	}
 }

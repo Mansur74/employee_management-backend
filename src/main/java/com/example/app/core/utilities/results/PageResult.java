@@ -14,5 +14,6 @@ import lombok.NoArgsConstructor;
 public class PageResult <T>{
 	int pageNo;
 	int pageSize;
+	int totalPages;
 	List<T> rows;
 }

@@ -34,6 +34,7 @@ public class EmployeeManager implements EmployeeService{
 		PageResult<EmployeeDto> result = new PageResult<>();
 		result.setPageNo(page.getNumber());
 		result.setPageSize(page.getSize());
+		result.setTotalPages(page.getTotalPages());
 		result.setRows(page.getContent().stream().map(employee -> mapToEmployeeDto(employee)).collect(Collectors.toList()));
 		return new SuccessDataResult<PageResult<EmployeeDto>>(result);
 	}

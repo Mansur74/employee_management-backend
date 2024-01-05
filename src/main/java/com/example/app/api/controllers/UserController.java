@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.app.business.abstracts.UserService;
-import com.example.app.core.dtos.UserDto;
 import com.example.app.core.utilities.results.DataResult;
+import com.example.app.dtos.UserDto;
 
 @RestController
 @RequestMapping("/api")
@@ -24,12 +24,6 @@ public class UserController {
 	
 	@Autowired
 	public UserService userService;
-	
-	@GetMapping("/user/me")
-    public ResponseEntity<DataResult<UserDto>> getMe(@AuthenticationPrincipal User user) {
-		DataResult<UserDto> userDto = this.userService.getUserByEmail(user.getUsername());
-		return ResponseEntity.status(HttpStatus.OK).body(userDto);
-    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/user")

@@ -23,7 +23,7 @@ public class CountryController {
 	@Autowired
 	private CountryService countryService;
 	
-	@PreAuthorize("hasAuthority('ADMIN')")
+	
 	@PostMapping("/country")
 	public ResponseEntity<DataResult<CountryDto>> createCountry(@RequestBody CountryDto countryDto)
 	{

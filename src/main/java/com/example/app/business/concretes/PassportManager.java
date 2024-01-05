@@ -61,6 +61,7 @@ public class PassportManager implements PassportService{
 	public DataResult<PassportDto> updatePassportById(PassportDto passportDto, int passportId) {
 		Passport passport = passportDao.findById(passportId).get();
 		Passport updatedPassport = updatePassport(passportDto, passport);
+		passportDao.save(updatedPassport);
 		return new SuccessDataResult<PassportDto>(mapToPassportDto(updatedPassport));
 	}
 

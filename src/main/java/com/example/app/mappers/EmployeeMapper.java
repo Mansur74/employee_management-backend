@@ -5,6 +5,10 @@ import com.example.app.entities.Employee;
 import static com.example.app.mappers.PassportMapper.mapToPassport;
 import static com.example.app.mappers.PassportMapper.mapToPassportDto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.example.app.dtos.CountryDto;
 import com.example.app.dtos.EmployeeDto;
 import com.example.app.dtos.PassportDto;
 
@@ -15,6 +19,7 @@ public class EmployeeMapper {
 				.id(employeeDto.getId())
 				.firstName(employeeDto.getFirstName())
 				.lastName(employeeDto.getLastName())
+				.gender(employeeDto.getGender())
 				.age(employeeDto.getAge())
 				.hiringDate(employeeDto.getHiringDate())
 				.department(employeeDto.getDepartment())
@@ -30,17 +35,14 @@ public class EmployeeMapper {
 				.id(employee.getId())
 				.firstName(employee.getFirstName())
 				.lastName(employee.getLastName())
+				.gender(employee.getGender())
 				.age(employee.getAge())
 				.hiringDate(employee.getHiringDate())
 				.department(employee.getDepartment())
 				.salary(employee.getSalary())
 				.description(employee.getDescription())
 				.imgURL(employee.getImgURL())
-				.passport(employee.getPassport() == null ? null : PassportDto.builder()
-						.id(employee.getPassport().getId())
-						.passportNumber(employee.getPassport().getPassportNumber())
-						.validDateTime(employee.getPassport().getValidDateTime())
-						.build())
+				.passport(employee.getPassport() == null ? null : mapToPassportDto(employee.getPassport()))
 				.build();
 	}
 	
