@@ -44,7 +44,7 @@ public class UserManager implements UserService {
 
 		userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
 		UserEntity user = mapToUser(userDto);
-		Role role = roleDao.findByName("ADMIN");
+		Role role = roleDao.findByName("USER");
 		user.setRoles(Arrays.asList(role));
 		UserEntity createdUser = userDao.save(user);
 		return new SuccessResult("Successfully created");

@@ -1,13 +1,8 @@
 package com.example.app.mappers;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.app.dtos.EmployeeDto;
-import com.example.app.dtos.RoleDto;
 import com.example.app.dtos.UserDto;
-import com.example.app.entities.Role;
 import com.example.app.entities.UserEntity;
 
 import static com.example.app.mappers.RoleMapper.mapToRoleDto;

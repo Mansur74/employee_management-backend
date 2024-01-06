@@ -1,8 +1,6 @@
 package com.example.app.mappers;
 
 import java.util.stream.Collectors;
-
-import com.example.app.dtos.CountryDto;
 import com.example.app.dtos.PassportDto;
 import com.example.app.entities.Passport;
 
@@ -15,7 +13,7 @@ public class PassportMapper {
 		return Passport.builder()
 				.id(passportDto.getId())
 				.passportNumber(passportDto.getPassportNumber())
-				.validDateTime(passportDto.getValidDateTime())
+				.validDate(passportDto.getValidDate())
 				.build();
 	}
 	
@@ -24,7 +22,7 @@ public class PassportMapper {
 		return PassportDto.builder()
 				.id(passport.getId())
 				.passportNumber(passport.getPassportNumber())
-				.validDateTime(passport.getValidDateTime())
+				.validDate(passport.getValidDate())
 				.countries(passport.getCountries().stream().map(country -> mapToCountryDto(country)).collect(Collectors.toList()))
 				.build();
 	}
@@ -32,7 +30,7 @@ public class PassportMapper {
 	public static Passport updatePassport(PassportDto passportDto, Passport passport)
 	{
 		passport.setPassportNumber(passportDto.getPassportNumber());
-		passport.setValidDateTime(passportDto.getValidDateTime());
+		passport.setValidDate(passportDto.getValidDate());
 		return passport;
 	}
 	

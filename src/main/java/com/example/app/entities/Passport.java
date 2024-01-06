@@ -30,7 +30,7 @@ public class Passport {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private Long passportNumber;
-	private LocalDateTime validDateTime;
+	private LocalDateTime validDate;
 	@OneToOne
 	@JoinColumn(name = "employee_id")
 	private Employee employee;

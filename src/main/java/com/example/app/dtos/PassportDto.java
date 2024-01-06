@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class PassportDto {
 	private int id;
 	private Long passportNumber;
-	private LocalDateTime validDateTime;
+	private LocalDateTime validDate;
 	private List<CountryDto> countries;
 }
