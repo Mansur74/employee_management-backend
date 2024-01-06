@@ -1,8 +1,5 @@
 package com.example.app.api.controllers;
 
-
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +20,6 @@ import com.example.app.business.abstracts.UserService;
 import com.example.app.core.utilities.results.DataResult;
 import com.example.app.core.utilities.results.Result;
 import com.example.app.core.utilities.results.SuccessDataResult;
-import com.example.app.core.utilities.results.SuccessResult;
 import com.example.app.dtos.AccessTokenDto;
 import com.example.app.dtos.AuthRequestDto;
 import com.example.app.dtos.JwtResponseDto;
