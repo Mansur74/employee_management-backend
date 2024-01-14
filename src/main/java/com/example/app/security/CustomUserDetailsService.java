@@ -33,9 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 			return authUser;
 		}
 		else {
-			{
-				throw new UsernameNotFoundException("Invalid username or password!");
-			}
+			throw new UsernameNotFoundException("Invalid username or password!");
 		}
 	}
 }

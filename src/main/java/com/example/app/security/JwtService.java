@@ -32,12 +32,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtService {
-	
-	@Autowired
-    CustomUserDetailsService customUserDetailsService;
-	
-	public static List<String> refreshTokens = new ArrayList<>();  
-
+	public static List<String> refreshTokens = new ArrayList<>();
     public static final String SECRET_ACCESS_TOKEN = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
     public static final String SECRET_REFRESH_TOKEN = "857638794F423F4428472B4K6250655368566D597133725677397Y2443261673";
 
@@ -98,57 +93,5 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(isAccessToken ? SECRET_ACCESS_TOKEN : SECRET_REFRESH_TOKEN);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-    
-    public DataResult<AccessTokenDto> getAccessToken(String authHeader)
-    {
-        if(authHeader != null)
-        {
-        	String refreshToken = null;
-            String email = null;
-            
-            if(authHeader != null && authHeader.startsWith("Bearer ")){
-            	refreshToken = authHeader.substring(7);
-            	email = extractUsername(refreshToken, false);
-            }
-        	
-        	UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
-        	AccessTokenDto accessTokenDto =  AccessTokenDto.builder().accessToken(GenerateToken(email, true)).build();
-        	if(validateToken(refreshToken, userDetails, false)){
-        		return new SuccessDataResult<AccessTokenDto>(accessTokenDto);  
-        	}
-        	else {
-                throw new RuntimeException("Refresh token is not valid");
-        	}
-        }
-        else {
-        	throw new RuntimeException("Refresh token can not be empty");
-		}
-    }
-    
-    public Result logout(String authHeader)
-    {
 
-    	String refreshToken = null;
-        String email = null;
-        if(authHeader == null || !authHeader.startsWith("Bearer ")){
-        	return new ErrorResult("Authorization header can not be empty"); 
-        }
-        
-        refreshToken = authHeader.substring(7);
-        email = extractUsername(refreshToken, false);
-        final String token = refreshToken;
-
-        if(refreshTokens.stream().anyMatch(t -> t.equals(token))){
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
-            if(validateToken(refreshToken, userDetails, false)){
-            	refreshTokens = refreshTokens.stream().filter(t -> !t.equals(token)).collect(Collectors.toList());
-            	return new SuccessResult("Loggoed out successfully.");
-            }
-            else 
-            	return new ErrorResult("Refresh token is not valid"); 
-
-        }
-        return new ErrorResult("The refresh token does not exists"); 
-
-    }
 }
