@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtService {
-	public static List<String> refreshTokens = new ArrayList<>();
+    public static List<String> refreshTokens = new ArrayList<>();
     public static final String SECRET_ACCESS_TOKEN = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
     public static final String SECRET_REFRESH_TOKEN = "857638794F423F4428472B4K6250655368566D597133725677397Y2443261673";
 
