@@ -1,9 +1,6 @@
 package com.example.app.dtos;
 
 import java.util.List;
-import java.util.Set;
-
-import com.example.app.entities.Role;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -28,5 +25,7 @@ public class UserDto {
 	String email;
 	@Size(min = 6, max = 10, message = "passport should be at least 6, max 10 chars")
 	String password;
+	List<EmployeeDto> employees;
+	UserDetailDto userDetail;
     List<RoleDto> roles;
 }

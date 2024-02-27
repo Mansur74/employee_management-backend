@@ -26,7 +26,7 @@ public class UserController {
 	public UserService userService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/user")
+    @GetMapping("/users")
     public ResponseEntity<DataResult<List<UserDto>>> getAllUsers() {
     	DataResult<List<UserDto>> userResponses = userService.getAllUsers();
         return ResponseEntity.ok(userResponses);      

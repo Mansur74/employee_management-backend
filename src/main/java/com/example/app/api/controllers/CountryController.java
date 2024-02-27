@@ -31,7 +31,7 @@ public class CountryController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdCountryDto);
 	}
 	
-	@GetMapping("/country")
+	@GetMapping("/countries")
 	public ResponseEntity<DataResult<List<CountryDto>>> getAllCountries()
 	{
 		DataResult<List<CountryDto>> countries = countryService.getAllCountries();

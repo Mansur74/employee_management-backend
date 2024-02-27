@@ -1,7 +1,10 @@
 package com.example.app.business.concretes;
 
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import com.example.app.dataAccess.abstracts.UserDao;
+import com.example.app.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +29,8 @@ public class EmployeeManager implements EmployeeService{
 	
 	@Autowired
 	EmployeeDao employeeDao;
+	@Autowired
+	UserDao userDao;
 	
 	@Override
 	public DataResult<PageResult<EmployeeDto>> getAllEmployees(int pageNo, int pageSize) {
@@ -40,31 +45,55 @@ public class EmployeeManager implements EmployeeService{
 	}
 
 	@Override
-	public DataResult<EmployeeDto> getEmployeeById(int employeeId) {
+	public DataResult<PageResult<EmployeeDto>> getEmployeesByUserId(int pageNo, int pageSize, int userId) {
+		PageRequest pageable = PageRequest.of(pageNo, pageSize);
+		Page<Employee> page = employeeDao.findByUserId(pageable, userId);
+		PageResult<EmployeeDto> result = new PageResult<>();
+		result.setPageNo(page.getNumber());
+		result.setPageSize(page.getSize());
+		result.setTotalPages(page.getTotalPages());
+		result.setRows(page.getContent().stream().map(employee -> mapToEmployeeDto(employee)).collect(Collectors.toList()));
+		return new SuccessDataResult<PageResult<EmployeeDto>>(result);
+	}
+
+
+	@Override
+	public DataResult<EmployeeDto> getEmployeeByIdAndUserId(int employeeId, int userId) {
 		Employee employee = employeeDao.findById(employeeId).get();
-		return new SuccessDataResult<EmployeeDto>(mapToEmployeeDto(employee));
+		if (employee.getUser().getId() == userId)
+		  return new SuccessDataResult<EmployeeDto>(mapToEmployeeDto(employee));
+		throw new NoSuchElementException();
 	}
 
 	@Override
-	public DataResult<EmployeeDto> createEmployee(EmployeeDto employeeDto) {
-		
+	public DataResult<EmployeeDto> createEmployee(EmployeeDto employeeDto, int userId) {
+		UserEntity user = userDao.findById(userId).get();
 		Employee employee = mapToEmployee(employeeDto);
+		employee.setUser(user);
 		Employee createdEmployee = employeeDao.save(employee);
 		return new SuccessDataResult<EmployeeDto>(mapToEmployeeDto(createdEmployee));
 	}
 
 	@Override
-	public DataResult<EmployeeDto> updateEmployeeById(EmployeeDto employeeDto, int employeeId) {
-		Employee employee = employeeDao.findById(employeeId).get();	
-		Employee updatedEmployee = employeeDao.save(updateEmployee(employeeDto, employee));
-		return new SuccessDataResult<EmployeeDto>(mapToEmployeeDto(updatedEmployee));
+	public DataResult<EmployeeDto> updateEmployeeByIdAndUserId(EmployeeDto employeeDto, int employeeId, int userId) {
+		Employee employee = employeeDao.findById(employeeId).get();
+		if(employee.getUser().getId() == userId)
+		{
+			Employee updatedEmployee = employeeDao.save(updateEmployee(employeeDto, employee));
+			return new SuccessDataResult<EmployeeDto>(mapToEmployeeDto(updatedEmployee));
+		}
+		throw new NoSuchElementException();
 	}
 
 	@Override
-	public Result deleteEmployee(int employeeId) {
+	public Result deleteEmployeeByIdAndUserId(int employeeId, int userId) {
 		Employee employee = employeeDao.findById(employeeId).get();
-		employeeDao.delete(employee);
-		return new SuccessResult("Employee was removed successfully");
+		if(employee.getUser().getId() == userId)
+		{
+			employeeDao.delete(employee);
+			return new SuccessResult("Employee was removed successfully");
+		}
+		throw new NoSuchElementException();
 	}
 
 }

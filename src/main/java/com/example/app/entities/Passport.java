@@ -32,7 +32,7 @@ public class Passport {
 	private Long passportNumber;
 	private LocalDateTime validDate;
 	@OneToOne
-	@JoinColumn(name = "employee_id")
+	@JoinColumn(name = "employee_id", nullable = false)
 	private Employee employee;
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(

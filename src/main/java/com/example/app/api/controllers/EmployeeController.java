@@ -1,8 +1,13 @@
 package com.example.app.api.controllers;
 
+import com.example.app.business.abstracts.UserService;
+import com.example.app.dtos.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.app.business.abstracts.EmployeeService;
@@ -19,15 +24,11 @@ public class EmployeeController {
 	
 	@Autowired
 	private EmployeeService employeeService;
-	
-	@PostMapping("/employee")
-	public ResponseEntity<DataResult<EmployeeDto>> createEmployee(@Valid @RequestBody EmployeeDto employeeDto)
-	{
-		DataResult<EmployeeDto> employee = employeeService.createEmployee(employeeDto);
-		return new ResponseEntity<DataResult<EmployeeDto>>(employee, HttpStatus.CREATED);
-	}
-	
-	@GetMapping("/employee")
+	@Autowired
+	private UserService userService;
+
+	@PreAuthorize("hasAuthority('ADMIN')")
+	@GetMapping("/employees")
 	public ResponseEntity<DataResult<PageResult<EmployeeDto>>> getAllEmployees(
 			@RequestParam(value = "page", defaultValue = "0", required = false) int pageNo,
 			@RequestParam(value = "size", defaultValue = "10", required = false) int pageSize)
@@ -35,25 +36,47 @@ public class EmployeeController {
 		DataResult<PageResult<EmployeeDto>> employees = employeeService.getAllEmployees(pageNo, pageSize);
 		return ResponseEntity.ok(employees);
 	}
-	
-	@GetMapping("/employee/{employeeId}")
-	public ResponseEntity<DataResult<EmployeeDto>> getEmployeeById(@PathVariable("employeeId") int employeeId)
+
+	@PostMapping("/my/employee")
+	public ResponseEntity<DataResult<EmployeeDto>> createEmployee(@AuthenticationPrincipal User user, @Valid @RequestBody EmployeeDto employeeDto)
 	{
-		DataResult<EmployeeDto> employee = employeeService.getEmployeeById(employeeId);
+		int userId = userService.getUserByEmail(user.getUsername()).getData().getId();
+		DataResult<EmployeeDto> employee = employeeService.createEmployee(employeeDto, userId);
+		return new ResponseEntity<DataResult<EmployeeDto>>(employee, HttpStatus.CREATED);
+	}
+
+	@GetMapping("/my/employees")
+	public ResponseEntity<DataResult<PageResult<EmployeeDto>>> getUserEmployees(
+			@AuthenticationPrincipal User user,
+			@RequestParam(value = "page", defaultValue = "0", required = false) int pageNo,
+			@RequestParam(value = "size", defaultValue = "10", required = false) int pageSize)
+	{
+		int userId = userService.getUserByEmail(user.getUsername()).getData().getId();
+		DataResult<PageResult<EmployeeDto>> employees = employeeService.getEmployeesByUserId(pageNo, pageSize, userId);
+		return ResponseEntity.ok(employees);
+	}
+	
+	@GetMapping("/my/employee/{employeeId}")
+	public ResponseEntity<DataResult<EmployeeDto>> getUserEmployeeById(@AuthenticationPrincipal User user, @PathVariable("employeeId") int employeeId)
+	{
+		int userId = userService.getUserByEmail(user.getUsername()).getData().getId();
+		DataResult<EmployeeDto> employee = employeeService.getEmployeeByIdAndUserId(employeeId, userId);
 		return ResponseEntity.ok(employee);
 	}
 	
-	@PutMapping("/employee/{employeeId}")
-	public ResponseEntity<DataResult<EmployeeDto>> updateEmployee(@Valid @RequestBody EmployeeDto employeeDto, @PathVariable("employeeId") int employeeId)
+	@PutMapping("/my/employee/{employeeId}")
+	public ResponseEntity<DataResult<EmployeeDto>> updateUserEmployee(@AuthenticationPrincipal User user, @Valid @RequestBody EmployeeDto employeeDto, @PathVariable("employeeId") int employeeId)
 	{
-		DataResult<EmployeeDto> employee = employeeService.updateEmployeeById(employeeDto, employeeId);
+		int userId = userService.getUserByEmail(user.getUsername()).getData().getId();
+		DataResult<EmployeeDto> employee = employeeService.updateEmployeeByIdAndUserId(employeeDto, employeeId, userId);
 		return new ResponseEntity<DataResult<EmployeeDto>>(employee, HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping("/employee/{employeeId}")
-	public ResponseEntity<Result> deleteEmployee(@PathVariable("employeeId") int employeeId)
+	@DeleteMapping("/my/employee/{employeeId}")
+	public ResponseEntity<Result> deleteEmployee(@AuthenticationPrincipal User user, @PathVariable("employeeId") int employeeId)
 	{
-		Result result = employeeService.deleteEmployee(employeeId);
+		int userId = userService.getUserByEmail(user.getUsername()).getData().getId();
+		Result result = employeeService.deleteEmployeeByIdAndUserId(employeeId, userId);
 		return new ResponseEntity<Result>(result, HttpStatus.CREATED);
 	}
 	

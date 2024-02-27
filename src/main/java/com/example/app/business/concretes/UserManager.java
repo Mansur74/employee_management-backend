@@ -39,7 +39,7 @@ public class UserManager implements UserService {
 		this.roleDao = roleDao;
 	}
 	
-	public Result createUser(UserDto userDto)
+	public DataResult<UserDto> createUser(UserDto userDto)
 	{
 
 		userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
@@ -47,7 +47,7 @@ public class UserManager implements UserService {
 		Role role = roleDao.findByName("USER");
 		user.setRoles(Arrays.asList(role));
 		UserEntity createdUser = userDao.save(user);
-		return new SuccessResult("Successfully created");
+		return new SuccessDataResult<UserDto>("Successfully created", mapToUserDto(createdUser));
 	}
 	
 	public DataResult<UserDto> getUserById(int id)

@@ -44,6 +44,9 @@ public class Employee {
 	private LocalDateTime createdAt;
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
-	@OneToOne(mappedBy = "employee", fetch = FetchType.EAGER)
+	@ManyToOne
+	@JoinColumn(name="user_id", nullable = false)
+	private UserEntity user;
+	@OneToOne(mappedBy = "employee")
 	private Passport passport;
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface AuthService {
+    public Result signUp(UserDto userDto);
     public DataResult<JwtResponseDto> signIn(AuthRequestDto authRequest);
     public DataResult<AccessTokenDto> getAccessToken(RefreshTokenDto body);
     public Result signOut(RefreshTokenDto body);

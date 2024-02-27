@@ -9,8 +9,9 @@ import com.example.app.dtos.EmployeeDto;
 
 public interface EmployeeService {
 	public DataResult<PageResult<EmployeeDto>> getAllEmployees(int pageNo, int pageSize);
-	public DataResult<EmployeeDto> getEmployeeById(int employeeId);
-	public DataResult<EmployeeDto> createEmployee(EmployeeDto employeeDto);
-	public DataResult<EmployeeDto> updateEmployeeById(EmployeeDto employeeDto, int employeeId);
-	public Result deleteEmployee(int employeeId);
+	public DataResult<PageResult<EmployeeDto>> getEmployeesByUserId(int pageNo, int pageSize, int userId);
+	public DataResult<EmployeeDto> getEmployeeByIdAndUserId(int employeeId, int userId);
+	public DataResult<EmployeeDto> createEmployee(EmployeeDto employeeDto , int userId);
+	public DataResult<EmployeeDto> updateEmployeeByIdAndUserId(EmployeeDto employeeDto, int employeeId, int userId);
+	public Result deleteEmployeeByIdAndUserId(int employeeId, int userId);
 }

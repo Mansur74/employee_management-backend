@@ -1,7 +1,9 @@
 package com.example.app.api.controllers;
 
 import com.example.app.business.abstracts.AuthService;
+import com.example.app.business.abstracts.UserDetailService;
 import com.example.app.dtos.*;
+import com.example.app.entities.UserDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +38,7 @@ public class AuthController {
 
     @PostMapping("/authorization/sign-up")
     public ResponseEntity<Result> signUp(@Valid @RequestBody UserDto user) {
-    	Result result = userService.createUser(user);
+        Result result = authService.signUp(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 

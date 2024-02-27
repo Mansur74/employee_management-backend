@@ -1,9 +1,15 @@
 package com.example.app.business.concretes;
 
 import com.example.app.business.abstracts.AuthService;
+import com.example.app.business.abstracts.UserDetailService;
 import com.example.app.business.abstracts.UserService;
 import com.example.app.core.utilities.results.*;
+import com.example.app.dataAccess.abstracts.UserDao;
+import com.example.app.dataAccess.abstracts.UserDetailDao;
 import com.example.app.dtos.*;
+import com.example.app.entities.UserDetail;
+import com.example.app.entities.UserEntity;
+import com.example.app.mappers.UserMapper;
 import com.example.app.security.CustomUserDetailsService;
 import com.example.app.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +24,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
+import static com.example.app.mappers.UserMapper.mapToUser;
+
 @Service
 public class AuthManager implements AuthService {
 
@@ -27,6 +35,18 @@ public class AuthManager implements AuthService {
     CustomUserDetailsService customUserDetailsService;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserDetailService userDetailService;
+
+    @Override
+    public Result signUp(UserDto userDto) {
+        UserDto createdUser = userService.createUser(userDto).getData();
+        UserDetailDto userDetail = UserDetailDto.builder().build();
+        userDetailService.createUserDetail(userDetail, createdUser.getId());
+        return new SuccessResult("Successfully signed up");
+    }
 
     @Override
     public DataResult<JwtResponseDto> signIn(AuthRequestDto authRequest) {
