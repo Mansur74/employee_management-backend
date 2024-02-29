@@ -1,5 +1,9 @@
-# Spring-Backend
-- Employee Manegement Backend (Java version)
-- Jwt Authorization
+# Backendof  Employee Manegement Backend
+- Spring Boot
 - MSSQL
+- JPA/Hibernate
+- Spring Security
+- Jwt Authorization
+- SOLID
+- Multitier Arthitecture
 - Unit Test
