@@ -1,4 +1,4 @@
-# Backendof  Employee Manegement Backend
+# Backend of  Employee Manegement Backend
 - Spring Boot
 - MSSQL
 - JPA/Hibernate
