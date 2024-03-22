@@ -29,6 +29,17 @@ public class CountryManager implements CountryService {
 	}
 
 	@Override
+	public DataResult<CountryDto> updateCountry(CountryDto countryDto, int countryId) {
+		Country country = countryDao.findById(countryId).get();
+		country.setCountryName(country.getCountryName());
+		country.setCapitalCity(country.getCapitalCity());
+		country.setImgURL(countryDto.getImgURL());
+		country.setPopulation(countryDto.getPopulation());
+		Country updatedCountry = countryDao.save(country);
+		return new SuccessDataResult<CountryDto>(mapToCountryDto(updatedCountry));
+	}
+
+	@Override
 	public DataResult<List<CountryDto>> getAllCountries() {
 		List<Country> countries = countryDao.findAll();
 		List<CountryDto> countryDtos = countries.stream().map(country -> mapToCountryDto(country)).collect(Collectors.toList());

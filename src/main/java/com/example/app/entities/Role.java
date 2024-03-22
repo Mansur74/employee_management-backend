@@ -7,12 +7,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +26,7 @@ public class Role {
 	private int id;
 	@Column(unique = true)
 	private String name;
-	@ManyToMany(mappedBy = "roles")
+	@ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
 	private List<UserEntity> users = new ArrayList<>();
 }
 

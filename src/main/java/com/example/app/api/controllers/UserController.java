@@ -2,6 +2,7 @@ package com.example.app.api.controllers;
 
 import java.util.List;
 
+import com.example.app.core.utilities.results.Result;
 import com.example.app.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,16 +29,16 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/users")
     public ResponseEntity<DataResult<List<UserDto>>> getAllUsers() {
-    	DataResult<List<UserDto>> userResponses = userService.getAllUsers();
-        return ResponseEntity.ok(userResponses);      
+    	DataResult<List<UserDto>> result = userService.getAllUsers();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
     
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/user/{userId}")
 	public ResponseEntity<DataResult<UserDto>> getUserById(@PathVariable("userId") int userId)
 	{
-		DataResult<UserDto> userDto = this.userService.getUserById(userId);
-		return ResponseEntity.status(HttpStatus.OK).body(userDto);
+		DataResult<UserDto> result = this.userService.getUserById(userId);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
 	@PutMapping("/user/me")
@@ -46,6 +47,15 @@ public class UserController {
 		DataResult<UserDto> userEntity = userService.getUserByEmail(user.getUsername());
 		int userId = userEntity.getData().getId();
 		DataResult<UserDto> result = this.userService.updateUser(userId, userDto);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
+	}
+
+	@DeleteMapping("/user/me")
+	public ResponseEntity<Result> deleteMe(@AuthenticationPrincipal User user)
+	{
+		DataResult<UserDto> userEntity = userService.getUserByEmail(user.getUsername());
+		int userId = userEntity.getData().getId();
+		Result result = this.userService.deleteUser(userId);
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 

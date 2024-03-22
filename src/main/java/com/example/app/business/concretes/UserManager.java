@@ -60,6 +60,13 @@ public class UserManager implements UserService {
 		return new SuccessDataResult<UserDto>("Successfully updated", mapToUserDto(updatedUser));
 	}
 
+	@Override
+	public Result deleteUser(int userId) {
+		UserEntity user = userDao.findById(userId).get();
+		userDao.delete(user);
+		return new SuccessResult("Deleted successfully");
+	}
+
 	public DataResult<UserDto> getUserById(int id)
 	{
 		UserEntity user = userDao.findById(id).orElseThrow();

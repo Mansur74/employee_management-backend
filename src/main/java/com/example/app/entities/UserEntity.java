@@ -39,7 +39,7 @@ public class UserEntity {
 	private UserDetail userDetail;
 	@OneToMany(mappedBy = "user")
 	private List<Employee> employees = new ArrayList<>();
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "users_roles", 
 			joinColumns = {@JoinColumn(name="user_id", referencedColumnName = "id")},

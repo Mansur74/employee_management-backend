@@ -6,11 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.app.business.abstracts.CountryService;
 import com.example.app.core.utilities.results.DataResult;
@@ -27,14 +23,23 @@ public class CountryController {
 	@PostMapping("/country")
 	public ResponseEntity<DataResult<CountryDto>> createCountry(@RequestBody CountryDto countryDto)
 	{
-		DataResult<CountryDto> createdCountryDto = countryService.createCountry(countryDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(createdCountryDto);
+		DataResult<CountryDto> result = countryService.createCountry(countryDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(result);
 	}
-	
+
+	@PreAuthorize("hasAuthority('ADMIN')")
+	@PostMapping("/country/{countryId}")
+	public ResponseEntity<DataResult<CountryDto>> updateCountry(@RequestBody CountryDto countryDto, @PathVariable int countryId)
+	{
+		DataResult<CountryDto> result = countryService.updateCountry(countryDto, countryId);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
+	}
+
+
 	@GetMapping("/countries")
 	public ResponseEntity<DataResult<List<CountryDto>>> getAllCountries()
 	{
-		DataResult<List<CountryDto>> countries = countryService.getAllCountries();
-		return ResponseEntity.status(HttpStatus.OK).body(countries);
+		DataResult<List<CountryDto>> result = countryService.getAllCountries();
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 }

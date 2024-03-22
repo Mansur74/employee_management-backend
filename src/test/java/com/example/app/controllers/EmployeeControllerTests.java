@@ -6,6 +6,7 @@ import com.example.app.business.abstracts.UserService;
 import com.example.app.business.concretes.EmployeeManager;
 import com.example.app.core.utilities.results.DataResult;
 import com.example.app.core.utilities.results.PageResult;
+import com.example.app.core.utilities.results.Result;
 import com.example.app.core.utilities.results.SuccessDataResult;
 import com.example.app.dtos.EmployeeDto;
 import com.example.app.dtos.UserDto;
@@ -36,7 +37,7 @@ public class EmployeeControllerTests {
     private EmployeeController employeeController;
 
     @Test
-    public void EmployeeController_CreateEmployee_ReturnEmployeeDto()
+    public void EmployeeController_CreateEmployee_ReturnDataResult()
     {
         User user = new User("mansur74", "deneme123", new ArrayList<>());
         DataResult<UserDto> userDto = new SuccessDataResult<>(UserDto.builder().id(1).build());
@@ -49,11 +50,23 @@ public class EmployeeControllerTests {
     }
 
     @Test
-    public void EmployeeController_GetAllEmployees_ReturnList()
+    public void EmployeeController_GetAllEmployees_ReturnDataResult()
     {
         DataResult<PageResult<EmployeeDto>> result = Mockito.mock(DataResult.class);
         when(employeeService.getAllEmployees(1, 10)).thenReturn(result);
         ResponseEntity<?> responseEntity = employeeController.getAllEmployees(1, 10);
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void EmployeeController_DeleteEmployee_ReturnResult()
+    {
+        User user = new User("mansur74", "deneme123", new ArrayList<>());
+        DataResult<UserDto> userDto = new SuccessDataResult<>(UserDto.builder().id(1).build());
+        Result result = Mockito.mock(Result.class);
+        when(userService.getUserByEmail(Mockito.any(String.class))).thenReturn(userDto);
+        when(employeeService.deleteEmployeeByIdAndUserId(5, 1)).thenReturn(result);
+        ResponseEntity<?> responseEntity = employeeController.deleteEmployee(user, 5);
         Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 

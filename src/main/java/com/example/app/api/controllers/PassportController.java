@@ -22,22 +22,22 @@ public class PassportController {
 	@GetMapping("/passport/{passportId}")
 	public ResponseEntity<DataResult<PassportDto>> getPassportById(@PathVariable int passportId)
 	{
-		DataResult<PassportDto> employee = passportService.getPassportById(passportId);
-		return ResponseEntity.ok(employee);
+		DataResult<PassportDto> result = passportService.getPassportById(passportId);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 	
 	@PostMapping("/employee/{employeeId}")
 	public ResponseEntity<DataResult<PassportDto>> createPassport(@RequestBody PassportDto passportDto, @PathVariable int employeeId)
 	{
-		DataResult<PassportDto> cretedPassport = passportService.createPassport(passportDto, employeeId);
-		return ResponseEntity.status(HttpStatus.CREATED).body(cretedPassport);
+		DataResult<PassportDto> result = passportService.createPassport(passportDto, employeeId);
+		return ResponseEntity.status(HttpStatus.CREATED).body(result);
 	}
 	
 	@PutMapping("/passport/{passportId}")
 	public ResponseEntity<DataResult<PassportDto>> updatePassportById(@RequestBody PassportDto passportDto, @PathVariable int passportId)
 	{
-		DataResult<PassportDto> updatedPassport = passportService.updatePassportById(passportDto, passportId);
-		return ResponseEntity.status(HttpStatus.OK).body(updatedPassport);
+		DataResult<PassportDto> result = passportService.updatePassportById(passportDto, passportId);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 	
 	@DeleteMapping("/passport/{passport}")

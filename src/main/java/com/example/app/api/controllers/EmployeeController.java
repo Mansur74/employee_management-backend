@@ -33,16 +33,16 @@ public class EmployeeController {
 			@RequestParam(value = "page", defaultValue = "0", required = false) int pageNo,
 			@RequestParam(value = "size", defaultValue = "10", required = false) int pageSize)
 	{
-		DataResult<PageResult<EmployeeDto>> employees = employeeService.getAllEmployees(pageNo, pageSize);
-		return ResponseEntity.ok(employees);
+		DataResult<PageResult<EmployeeDto>> result = employeeService.getAllEmployees(pageNo, pageSize);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
 	@PostMapping("/my/employee")
 	public ResponseEntity<DataResult<EmployeeDto>> createEmployee(@AuthenticationPrincipal User user, @Valid @RequestBody EmployeeDto employeeDto)
 	{
 		int userId = userService.getUserByEmail(user.getUsername()).getData().getId();
-		DataResult<EmployeeDto> employee = employeeService.createEmployee(employeeDto, userId);
-		return new ResponseEntity<DataResult<EmployeeDto>>(employee, HttpStatus.CREATED);
+		DataResult<EmployeeDto> result = employeeService.createEmployee(employeeDto, userId);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
 	@GetMapping("/my/employees")
@@ -52,24 +52,24 @@ public class EmployeeController {
 			@RequestParam(value = "size", defaultValue = "10", required = false) int pageSize)
 	{
 		int userId = userService.getUserByEmail(user.getUsername()).getData().getId();
-		DataResult<PageResult<EmployeeDto>> employees = employeeService.getEmployeesByUserId(pageNo, pageSize, userId);
-		return ResponseEntity.ok(employees);
+		DataResult<PageResult<EmployeeDto>> result = employeeService.getEmployeesByUserId(pageNo, pageSize, userId);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 	
 	@GetMapping("/my/employee/{employeeId}")
 	public ResponseEntity<DataResult<EmployeeDto>> getUserEmployeeById(@AuthenticationPrincipal User user, @PathVariable("employeeId") int employeeId)
 	{
 		int userId = userService.getUserByEmail(user.getUsername()).getData().getId();
-		DataResult<EmployeeDto> employee = employeeService.getEmployeeByIdAndUserId(employeeId, userId);
-		return ResponseEntity.ok(employee);
+		DataResult<EmployeeDto> result = employeeService.getEmployeeByIdAndUserId(employeeId, userId);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 	
 	@PutMapping("/my/employee/{employeeId}")
 	public ResponseEntity<DataResult<EmployeeDto>> updateUserEmployee(@AuthenticationPrincipal User user, @Valid @RequestBody EmployeeDto employeeDto, @PathVariable("employeeId") int employeeId)
 	{
 		int userId = userService.getUserByEmail(user.getUsername()).getData().getId();
-		DataResult<EmployeeDto> employee = employeeService.updateEmployeeByIdAndUserId(employeeDto, employeeId, userId);
-		return new ResponseEntity<DataResult<EmployeeDto>>(employee, HttpStatus.CREATED);
+		DataResult<EmployeeDto> result = employeeService.updateEmployeeByIdAndUserId(employeeDto, employeeId, userId);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 	
 	@DeleteMapping("/my/employee/{employeeId}")
@@ -77,7 +77,7 @@ public class EmployeeController {
 	{
 		int userId = userService.getUserByEmail(user.getUsername()).getData().getId();
 		Result result = employeeService.deleteEmployeeByIdAndUserId(employeeId, userId);
-		return new ResponseEntity<Result>(result, HttpStatus.CREATED);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 	
 	
