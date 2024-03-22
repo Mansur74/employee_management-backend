@@ -17,5 +17,6 @@ public class UserDetailDto {
     private LocalDateTime birthdate;
     private String location;
     private Long phoneNumber;
+    private String description;
     private String imgURL;
 }

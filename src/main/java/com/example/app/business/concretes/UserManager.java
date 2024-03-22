@@ -1,6 +1,7 @@
 package com.example.app.business.concretes;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +50,16 @@ public class UserManager implements UserService {
 		UserEntity createdUser = userDao.save(user);
 		return new SuccessDataResult<UserDto>("Successfully created", mapToUserDto(createdUser));
 	}
-	
+
+	@Override
+	public DataResult<UserDto> updateUser(int userId, UserDto userDto) {
+		UserEntity user = userDao.findById(userId).get();
+		user.setFirstName(userDto.getFirstName());
+		user.setLastName(userDto.getLastName());
+		UserEntity updatedUser = userDao.save(user);
+		return new SuccessDataResult<UserDto>("Successfully updated", mapToUserDto(updatedUser));
+	}
+
 	public DataResult<UserDto> getUserById(int id)
 	{
 		UserEntity user = userDao.findById(id).orElseThrow();

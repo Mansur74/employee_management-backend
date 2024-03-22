@@ -60,9 +60,10 @@ public class EmployeeManager implements EmployeeService{
 	@Override
 	public DataResult<EmployeeDto> getEmployeeByIdAndUserId(int employeeId, int userId) {
 		Employee employee = employeeDao.findById(employeeId).get();
-		if (employee.getUser().getId() == userId)
-		  return new SuccessDataResult<EmployeeDto>(mapToEmployeeDto(employee));
-		throw new NoSuchElementException();
+		if (employee.getUser().getId() != userId)
+			throw new NoSuchElementException();
+
+		return new SuccessDataResult<EmployeeDto>(mapToEmployeeDto(employee));
 	}
 
 	@Override
@@ -77,23 +78,22 @@ public class EmployeeManager implements EmployeeService{
 	@Override
 	public DataResult<EmployeeDto> updateEmployeeByIdAndUserId(EmployeeDto employeeDto, int employeeId, int userId) {
 		Employee employee = employeeDao.findById(employeeId).get();
-		if(employee.getUser().getId() == userId)
-		{
-			Employee updatedEmployee = employeeDao.save(updateEmployee(employeeDto, employee));
-			return new SuccessDataResult<EmployeeDto>(mapToEmployeeDto(updatedEmployee));
-		}
-		throw new NoSuchElementException();
+		if(employee.getUser().getId() != userId)
+			throw new NoSuchElementException();
+
+		Employee updatedEmployee = employeeDao.save(updateEmployee(employeeDto, employee));
+		return new SuccessDataResult<EmployeeDto>(mapToEmployeeDto(updatedEmployee));
 	}
 
 	@Override
 	public Result deleteEmployeeByIdAndUserId(int employeeId, int userId) {
 		Employee employee = employeeDao.findById(employeeId).get();
-		if(employee.getUser().getId() == userId)
-		{
-			employeeDao.delete(employee);
-			return new SuccessResult("Employee was removed successfully");
-		}
-		throw new NoSuchElementException();
+		if(employee.getUser().getId() != userId)
+			throw new NoSuchElementException();
+
+		employeeDao.delete(employee);
+		return new SuccessResult("Employee was removed successfully");
+
 	}
 
 }

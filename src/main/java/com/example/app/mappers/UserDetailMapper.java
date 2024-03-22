@@ -13,6 +13,7 @@ public class UserDetailMapper {
                 .birthdate(userDetailDto.getBirthdate())
                 .location(userDetailDto.getLocation())
                 .phoneNumber(userDetailDto.getPhoneNumber())
+                .description(userDetailDto.getDescription())
                 .build();
     }
 
@@ -25,6 +26,7 @@ public class UserDetailMapper {
                 .birthdate(userDetail.getBirthdate())
                 .location(userDetail.getLocation())
                 .phoneNumber(userDetail.getPhoneNumber())
+                .description(userDetail.getDescription())
                 .build();
     }
     public static UserDetail updateUserDetail(UserDetailDto userDetailDto, UserDetail userDetail)
@@ -34,6 +36,7 @@ public class UserDetailMapper {
         userDetail.setImgURL(userDetailDto.getImgURL());
         userDetail.setLocation(userDetailDto.getLocation());
         userDetail.setPhoneNumber(userDetailDto.getPhoneNumber());
+        userDetail.setDescription(userDetailDto.getDescription());
         return userDetail;
     }
 }

@@ -22,6 +22,7 @@ public class UserDetail {
     private LocalDateTime birthdate;
     private String location;
     private Long phoneNumber;
+    private String description;
     private String imgURL;
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
