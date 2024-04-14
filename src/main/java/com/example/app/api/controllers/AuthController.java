@@ -30,9 +30,6 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api")
 public class AuthController {
-	
-	@Autowired
-	private UserService userService;
     @Autowired
     private AuthService authService;
 
@@ -53,12 +50,6 @@ public class AuthController {
     @PostMapping("/authorization/sign-out")
     public ResponseEntity<Result> signOut(@RequestBody RefreshTokenDto refreshToken){
         return ResponseEntity.status(HttpStatus.OK).body(authService.signOut(refreshToken));
-    }
-    
-    @GetMapping("/authorization/me")
-    public ResponseEntity<DataResult<UserDto>> authorization(@AuthenticationPrincipal User user) {
-		DataResult<UserDto> userDto = this.userService.getUserByEmail(user.getUsername());
-		return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
 
     @PostMapping("/authorization/accessToken")

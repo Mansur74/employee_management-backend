@@ -7,6 +7,7 @@ import com.example.app.dataAccess.abstracts.UserDao;
 import com.example.app.dtos.EmployeeDto;
 import com.example.app.entities.Employee;
 import com.example.app.entities.UserEntity;
+import com.example.app.security.SecurityUtil;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,45 +36,47 @@ public class EmployeeServiceTests {
     @Test
     public void EmployeeService_createEmployee()
     {
-        UserEntity user = UserEntity.builder().id(1).build();
+        UserEntity user = UserEntity.builder().id(1).email("test@hotmail.com").build();
         EmployeeDto employeeDto = EmployeeDto
                 .builder()
                 .firstName("test")
                 .build();
-        when(userDao.findById(1)).thenReturn(Optional.of(user));
 
         Employee employee = Mockito.mock(Employee.class);
 
+        when(userDao.findByEmail(Mockito.any())).thenReturn(user);
         when(employeeDao.save(Mockito.any(Employee.class))).thenReturn(employee);
-        DataResult<EmployeeDto> result = employeeManager.createEmployee(employeeDto, 1);
+        DataResult<EmployeeDto> result = employeeManager.createEmployee(employeeDto);
         Assertions.assertThat(result).isNotNull();
     }
 
     @Test
     public void EmployeeService_updateEmployee()
     {
-        UserEntity user = UserEntity.builder().id(1).build();
+        UserEntity user = UserEntity.builder().id(1).email("test@hotmail.com").build();
         Employee employee = Employee.builder().user(user).id(5).build();
 
         EmployeeDto employeeDto = EmployeeDto
                 .builder()
                 .firstName("test")
                 .build();
+        when(userDao.findByEmail(Mockito.any())).thenReturn(user);
         when(employeeDao.findById(5)).thenReturn(Optional.of(employee));
         when(employeeDao.save(Mockito.any(Employee.class))).thenReturn(employee);
 
-        DataResult<EmployeeDto> result = employeeManager.updateEmployeeByIdAndUserId(employeeDto,5, 1);
+        DataResult<EmployeeDto> result = employeeManager.updateEmployee(employeeDto,5);
         Assertions.assertThat(result).isNotNull();
     }
 
     @Test
     public void EmployeeService_getEmployeeById()
     {
-        UserEntity user = UserEntity.builder().id(1).build();
+        UserEntity user = UserEntity.builder().id(1).email("test@hotmail.com").build();
         Employee employee = Employee.builder().user(user).id(5).build();
 
+        when(userDao.findByEmail(Mockito.any())).thenReturn(user);
         when(employeeDao.findById(5)).thenReturn(Optional.ofNullable(employee));
-        DataResult<EmployeeDto> result = employeeManager.getEmployeeByIdAndUserId(5,1);
+        DataResult<EmployeeDto> result = employeeManager.getEmployeeById(5);
         Assertions.assertThat(result).isNotNull();
     }
 }

@@ -40,6 +40,11 @@ public class UserController {
 		DataResult<UserDto> result = this.userService.getUserById(userId);
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
+	@GetMapping("/user/me")
+	public ResponseEntity<DataResult<UserDto>> authorization(@AuthenticationPrincipal User user) {
+		DataResult<UserDto> userDto = this.userService.getUserByEmail(user.getUsername());
+		return ResponseEntity.status(HttpStatus.OK).body(userDto);
+	}
 
 	@PutMapping("/user/me")
 	public ResponseEntity<DataResult<UserDto>> updateMe(@AuthenticationPrincipal User user, @RequestBody UserDto userDto)

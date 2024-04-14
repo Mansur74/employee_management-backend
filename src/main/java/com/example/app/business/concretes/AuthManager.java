@@ -20,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -36,15 +37,18 @@ public class AuthManager implements AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private UserService userService;
+    private UserDao userDao;
     @Autowired
-    private UserDetailService userDetailService;
+    private UserDetailDao userDetailDao;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Result signUp(UserDto userDto) {
-        UserDto createdUser = userService.createUser(userDto).getData();
-        UserDetailDto userDetail = UserDetailDto.builder().build();
-        userDetailService.createUserDetail(userDetail, createdUser.getId());
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        UserEntity createdUser = userDao.save(mapToUser(userDto));
+        UserDetail userDetail = UserDetail.builder().user(createdUser).build();
+        userDetailDao.save(userDetail);
         return new SuccessResult("Successfully signed up");
     }
 

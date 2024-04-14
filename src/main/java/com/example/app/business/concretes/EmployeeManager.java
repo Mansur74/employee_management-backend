@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import com.example.app.dataAccess.abstracts.UserDao;
 import com.example.app.entities.UserEntity;
+import com.example.app.mappers.EmployeeMapper;
+import com.example.app.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,9 +47,10 @@ public class EmployeeManager implements EmployeeService{
 	}
 
 	@Override
-	public DataResult<PageResult<EmployeeDto>> getEmployeesByUserId(int pageNo, int pageSize, int userId) {
+	public DataResult<PageResult<EmployeeDto>> getEmployees(int pageNo, int pageSize) {
+		UserEntity user = userDao.findByEmail(SecurityUtil.getSessionUser());
 		PageRequest pageable = PageRequest.of(pageNo, pageSize);
-		Page<Employee> page = employeeDao.findByUserId(pageable, userId);
+		Page<Employee> page = employeeDao.findByUserId(pageable, user.getId());
 		PageResult<EmployeeDto> result = new PageResult<>();
 		result.setPageNo(page.getNumber());
 		result.setPageSize(page.getSize());
@@ -58,17 +61,18 @@ public class EmployeeManager implements EmployeeService{
 
 
 	@Override
-	public DataResult<EmployeeDto> getEmployeeByIdAndUserId(int employeeId, int userId) {
+	public DataResult<EmployeeDto> getEmployeeById(int employeeId) {
+		String email = SecurityUtil.getSessionUser();
 		Employee employee = employeeDao.findById(employeeId).get();
-		if (employee.getUser().getId() != userId)
+		if (employee.getUser().getEmail().equals(email))
 			throw new NoSuchElementException();
 
 		return new SuccessDataResult<EmployeeDto>(mapToEmployeeDto(employee));
 	}
 
 	@Override
-	public DataResult<EmployeeDto> createEmployee(EmployeeDto employeeDto, int userId) {
-		UserEntity user = userDao.findById(userId).get();
+	public DataResult<EmployeeDto> createEmployee(EmployeeDto employeeDto) {
+		UserEntity user = userDao.findByEmail(SecurityUtil.getSessionUser());
 		Employee employee = mapToEmployee(employeeDto);
 		employee.setUser(user);
 		Employee createdEmployee = employeeDao.save(employee);
@@ -76,19 +80,21 @@ public class EmployeeManager implements EmployeeService{
 	}
 
 	@Override
-	public DataResult<EmployeeDto> updateEmployeeByIdAndUserId(EmployeeDto employeeDto, int employeeId, int userId) {
+	public DataResult<EmployeeDto> updateEmployee(EmployeeDto employeeDto, int employeeId) {
+		String email = SecurityUtil.getSessionUser();
 		Employee employee = employeeDao.findById(employeeId).get();
-		if(employee.getUser().getId() != userId)
+		if(employee.getUser().getEmail().equals(email))
 			throw new NoSuchElementException();
 
-		Employee updatedEmployee = employeeDao.save(updateEmployee(employeeDto, employee));
+		Employee updatedEmployee = employeeDao.save(EmployeeMapper.updateEmployee(employeeDto, employee));
 		return new SuccessDataResult<EmployeeDto>(mapToEmployeeDto(updatedEmployee));
 	}
 
 	@Override
-	public Result deleteEmployeeByIdAndUserId(int employeeId, int userId) {
+	public Result deleteEmployee(int employeeId) {
+		String email = SecurityUtil.getSessionUser();
 		Employee employee = employeeDao.findById(employeeId).get();
-		if(employee.getUser().getId() != userId)
+		if(employee.getUser().getEmail().equals(email))
 			throw new NoSuchElementException();
 
 		employeeDao.delete(employee);

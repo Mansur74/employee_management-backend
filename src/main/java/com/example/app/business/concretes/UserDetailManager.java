@@ -8,6 +8,7 @@ import com.example.app.dtos.UserDetailDto;
 import com.example.app.entities.UserDetail;
 import com.example.app.entities.UserEntity;
 import com.example.app.mappers.UserDetailMapper;
+import com.example.app.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,8 @@ public class UserDetailManager implements UserDetailService {
     private UserDao userDao;
 
     @Override
-    public DataResult<UserDetailDto> createUserDetail(UserDetailDto userDetailDto, int userId) {
-        UserEntity user = userDao.findById(userId).get();
+    public DataResult<UserDetailDto> createUserDetail(UserDetailDto userDetailDto) {
+        UserEntity user = userDao.findByEmail(SecurityUtil.getSessionUser());
         UserDetail userDetail = mapToUserDetail(userDetailDto);
         userDetail.setUser(user);
         UserDetail createdUserDetail = userDetailDao.save(UserDetailMapper.updateUserDetail(userDetailDto, userDetail));
@@ -32,9 +33,10 @@ public class UserDetailManager implements UserDetailService {
     }
 
     @Override
-    public DataResult<UserDetailDto> updateUserDetail(UserDetailDto userDetailDto, int userDetailId, int userId) {
+    public DataResult<UserDetailDto> updateUserDetail(UserDetailDto userDetailDto, int userDetailId) {
+        String email = SecurityUtil.getSessionUser();
         UserDetail userDetail = userDetailDao.findById(userDetailId).get();
-        if(userDetail.getUser().getId() == userId)
+        if(userDetail.getUser().getEmail().equals(email))
         {
             UserDetail updatedUserDetail = userDetailDao.save(UserDetailMapper.updateUserDetail(userDetailDto, userDetail));
             return new SuccessDataResult<>(mapToUserDetailsDto(updatedUserDetail));

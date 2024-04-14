@@ -21,18 +21,16 @@ public class UserDetailController {
     public UserService userService;
 
     @PostMapping("/my/userDetail")
-    public ResponseEntity<DataResult<UserDetailDto>> createUserDetail(@AuthenticationPrincipal User user, @RequestBody UserDetailDto userDetailDto)
+    public ResponseEntity<DataResult<UserDetailDto>> createUserDetail(@RequestBody UserDetailDto userDetailDto)
     {
-        int userId = userService.getUserByEmail(user.getUsername()).getData().getId();
-        DataResult<UserDetailDto> result = userDetailService.createUserDetail(userDetailDto, userId);
+        DataResult<UserDetailDto> result = userDetailService.createUserDetail(userDetailDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PutMapping("/my/userDetail/{userDetailId}")
-    public ResponseEntity<DataResult<UserDetailDto>> updateUserDetail(@AuthenticationPrincipal User user, @RequestBody UserDetailDto userDetailDto, @PathVariable int userDetailId)
+    public ResponseEntity<DataResult<UserDetailDto>> updateUserDetail(@RequestBody UserDetailDto userDetailDto, @PathVariable int userDetailId)
     {
-        int userId = userService.getUserByEmail(user.getUsername()).getData().getId();
-        DataResult<UserDetailDto> result = userDetailService.updateUserDetail(userDetailDto, userDetailId, userId);
+        DataResult<UserDetailDto> result = userDetailService.updateUserDetail(userDetailDto, userDetailId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

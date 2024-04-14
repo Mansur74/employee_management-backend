@@ -39,13 +39,10 @@ public class EmployeeControllerTests {
     @Test
     public void EmployeeController_CreateEmployee_ReturnDataResult()
     {
-        User user = new User("mansur74", "deneme123", new ArrayList<>());
-        DataResult<UserDto> userDto = new SuccessDataResult<>(UserDto.builder().id(1).build());
         EmployeeDto employeeDto = Mockito.mock(EmployeeDto.class);
         DataResult<EmployeeDto> result = Mockito.mock(DataResult.class);
-        when(userService.getUserByEmail(Mockito.any(String.class))).thenReturn(userDto);
-        when(employeeService.createEmployee(employeeDto, 1)).thenReturn(result);
-        ResponseEntity<?> responseEntity = employeeController.createEmployee(user, employeeDto);
+        when(employeeService.createEmployee(employeeDto)).thenReturn(result);
+        ResponseEntity<?> responseEntity = employeeController.createEmployee(employeeDto);
         Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
@@ -61,12 +58,9 @@ public class EmployeeControllerTests {
     @Test
     public void EmployeeController_DeleteEmployee_ReturnResult()
     {
-        User user = new User("mansur74", "deneme123", new ArrayList<>());
-        DataResult<UserDto> userDto = new SuccessDataResult<>(UserDto.builder().id(1).build());
         Result result = Mockito.mock(Result.class);
-        when(userService.getUserByEmail(Mockito.any(String.class))).thenReturn(userDto);
-        when(employeeService.deleteEmployeeByIdAndUserId(5, 1)).thenReturn(result);
-        ResponseEntity<?> responseEntity = employeeController.deleteEmployee(user, 5);
+        when(employeeService.deleteEmployee(5)).thenReturn(result);
+        ResponseEntity<?> responseEntity = employeeController.deleteEmployee( 5);
         Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 

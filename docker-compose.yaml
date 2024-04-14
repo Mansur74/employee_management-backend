@@ -2,11 +2,11 @@ version: "3.8"
 services:
   db:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
-    container_name: db_mssql
+    container_name: mssqldb
     ports:
       - "1433:1433"
     environment:
-      SA_PASSWORD: "#Deneme123"
+      SA_PASSWORD: "Deneme123!"
       ACCEPT_EULA: "Y"
 
   app:

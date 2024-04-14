@@ -40,7 +40,7 @@ public class PassportController {
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 	
-	@DeleteMapping("/passport/{passport}")
+	@DeleteMapping("/passport/{passportId}")
 	public ResponseEntity<Result> deletePassport(@PathVariable int passportId)
 	{
 		Result result = passportService.deletePassport(passportId);
