@@ -36,7 +36,7 @@ public class UserDetailManager implements UserDetailService {
     public DataResult<UserDetailDto> updateUserDetail(UserDetailDto userDetailDto, int userDetailId) {
         String email = SecurityUtil.getSessionUser();
         UserDetail userDetail = userDetailDao.findById(userDetailId).get();
-        if(userDetail.getUser().getEmail().equals(email))
+        if(!userDetail.getUser().getEmail().equals(email))
         {
             UserDetail updatedUserDetail = userDetailDao.save(UserDetailMapper.updateUserDetail(userDetailDto, userDetail));
             return new SuccessDataResult<>(mapToUserDetailsDto(updatedUserDetail));

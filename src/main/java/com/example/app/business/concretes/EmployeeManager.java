@@ -64,7 +64,7 @@ public class EmployeeManager implements EmployeeService{
 	public DataResult<EmployeeDto> getEmployeeById(int employeeId) {
 		String email = SecurityUtil.getSessionUser();
 		Employee employee = employeeDao.findById(employeeId).get();
-		if (employee.getUser().getEmail().equals(email))
+		if (!employee.getUser().getEmail().equals(email))
 			throw new NoSuchElementException();
 
 		return new SuccessDataResult<EmployeeDto>(mapToEmployeeDto(employee));
@@ -83,7 +83,7 @@ public class EmployeeManager implements EmployeeService{
 	public DataResult<EmployeeDto> updateEmployee(EmployeeDto employeeDto, int employeeId) {
 		String email = SecurityUtil.getSessionUser();
 		Employee employee = employeeDao.findById(employeeId).get();
-		if(employee.getUser().getEmail().equals(email))
+		if(!employee.getUser().getEmail().equals(email))
 			throw new NoSuchElementException();
 
 		Employee updatedEmployee = employeeDao.save(EmployeeMapper.updateEmployee(employeeDto, employee));
@@ -94,7 +94,7 @@ public class EmployeeManager implements EmployeeService{
 	public Result deleteEmployee(int employeeId) {
 		String email = SecurityUtil.getSessionUser();
 		Employee employee = employeeDao.findById(employeeId).get();
-		if(employee.getUser().getEmail().equals(email))
+		if(!employee.getUser().getEmail().equals(email))
 			throw new NoSuchElementException();
 
 		employeeDao.delete(employee);

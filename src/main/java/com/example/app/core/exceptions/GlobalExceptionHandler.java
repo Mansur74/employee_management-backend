@@ -2,6 +2,7 @@ package com.example.app.core.exceptions;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +32,15 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<DataResult<Object>>(new ErrorDataResult<Object>(validationErrors), HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Result> handleRuntimeException(Exception ex) {
-		if(ex instanceof BadCredentialsException)
-			return new ResponseEntity<>(new ErrorResult("Username or password is invalid"), HttpStatus.UNAUTHORIZED);
-		return new ResponseEntity<>(new ErrorResult(ex.getMessage()), HttpStatus.FORBIDDEN);
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<Result> handleBadCredentialsException(BadCredentialsException ex) {
+		return new ResponseEntity<>(new ErrorResult("Username or password is invalid"), HttpStatus.UNAUTHORIZED);
 	}
+
+	@ExceptionHandler(NoSuchElementException.class)
+	public ResponseEntity<Result> handleNoSuchElementException(NoSuchElementException ex) {
+		return new ResponseEntity<>(new ErrorResult(ex.getMessage()), HttpStatus.NOT_FOUND);
+	}
+
 
 }
