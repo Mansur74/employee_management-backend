@@ -4,7 +4,7 @@
 - MSSQL
 - JPA/Hibernate
 - Spring Security
-- Jwt Authorization
+- Role Based (USER, ADMIN) Jwt Authorization
 - SOLID
 - Multitier Arthitecture
 - JUnit Test
